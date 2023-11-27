@@ -16,7 +16,7 @@ void setup() {
   
   Serial.println("Starting up...");
  
-  delay(1000);
+  delay(10);
  
   WiFi.begin(ssid, password);
  
@@ -41,23 +41,20 @@ void loop() {
     while (client.connected()) {
 
       // Send test data (emulate device) (this would normally be sent by the MindWave device, so comment this out)
-      if(SerialPort.available()==0){
-        SerialPort.println(String(ii));
-        ii++;
-      }
+      //if(SerialPort.available()==0){
+      //  SerialPort.println(String(ii));
+      //  ii++;
+      //}
 
       // If data is received from the MindWave, send it to the client via WiFi
       while (SerialPort.available()>0) {
         client.write(SerialPort.read());
       }
 
-        //client.println("This is example test data: " + String(ii));
-//      while (client.available()>0) {
-//        char c = client.read();
-//        Serial.write(c);
-//      }
- 
-      //delay(10);
+      // If the user is sending data to the MindWave via WiFi (config information)
+      while (client.available()>0)[[unlikely]] {
+        SerialPort.write(client.read());
+      }
     }
  
     client.stop();
